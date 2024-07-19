@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 export const HomePage = (props) => {
-  const { setFile, setAudioStream } = props;
+  const { setAudioStream, setFile } = props;
 
   const [recordingStatus, setRecordingStatus] = useState("inactive");
   const [audioChunks, setAudioChunks] = useState([]);
@@ -11,7 +11,7 @@ export const HomePage = (props) => {
 
   const mimeType = "audio/webm";
 
-  const startRecording = async () => {
+  async function startRecording() {
     let tempStream;
     console.log("Start recording");
 
@@ -27,7 +27,6 @@ export const HomePage = (props) => {
     }
     setRecordingStatus("recording");
 
-    //create new Media recorder instance using the stream
     const media = new MediaRecorder(tempStream, { type: mimeType });
     mediaRecorder.current = media;
 
@@ -43,9 +42,9 @@ export const HomePage = (props) => {
       localAudioChunks.push(event.data);
     };
     setAudioChunks(localAudioChunks);
-  };
+  }
 
-  const stopRecording = async () => {
+  async function stopRecording() {
     setRecordingStatus("inactive");
     console.log("Stop recording");
 
@@ -56,7 +55,7 @@ export const HomePage = (props) => {
       setAudioChunks([]);
       setDuration(0);
     };
-  };
+  }
 
   useEffect(() => {
     if (recordingStatus === "inactive") {
@@ -76,7 +75,7 @@ export const HomePage = (props) => {
         Free<span className="text-blue-400 bold">Scribe</span>
       </h1>
       <h3 className="font-medium md:text-lg">
-        Record <span className="text-blue-400">&rarr;</span> Transcribe
+        Record <span className="text-blue-400">&rarr;</span> Transcribe{" "}
         <span className="text-blue-400">&rarr;</span> Translate
       </h3>
       <button
@@ -89,19 +88,21 @@ export const HomePage = (props) => {
           {recordingStatus === "inactive" ? "Record" : `Stop recording`}
         </p>
         <div className="flex items-center gap-2">
-          {duration !== 0 && <p className="text-sm">{duration}s</p>}
+          {/* {duration !== 0 && (
+                        <p className='text-sm'>{duration}s</p>
+                    )} */}
           <i
             className={
-              "fa-solid duration-200 fa-microphone" +
+              "fa-solid duration-200 fa-microphone " +
               (recordingStatus === "recording" ? " text-rose-300" : "")
             }
           ></i>
         </div>
       </button>
       <p className="text-base">
-        Or
+        Or{" "}
         <label className="text-blue-400 cursor-pointer hover:text-blue-600 duration-200">
-          upload
+          upload{" "}
           <input
             onChange={(e) => {
               const tempFile = e.target.files[0];
@@ -109,12 +110,12 @@ export const HomePage = (props) => {
             }}
             className="hidden"
             type="file"
-            accept=".mp3, .wave"
+            accept=".mp3,.wave"
           />
-        </label>
+        </label>{" "}
         a mp3 file
       </p>
       <p className="italic text-slate-400">Free now free forever</p>
     </main>
   );
-};
+}
